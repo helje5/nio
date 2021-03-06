@@ -4,8 +4,8 @@ import NioKit
 import CommonMarkAttributedString
 
 struct MarkdownText: View {
-    let markdown: String
-    let textColor: UXColor
+    private let markdown: String
+    private let textColor: UXColor
 
     @State private var contentSizeThatFits: CGSize = .zero
 
