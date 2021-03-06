@@ -76,6 +76,7 @@ struct BorderedMessageView<Model>: View where Model: MessageViewModelProtocol {
             .foregroundColor(.secondary)
     }
 
+    @ViewBuilder
     private var markdownView: some View {
         MarkdownText(
             markdown: model.text,

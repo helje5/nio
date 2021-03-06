@@ -77,6 +77,10 @@ struct MarkdownText: View {
     }
 
     var body: some View {
+      #if os(macOS)
+        // Until we have something better
+        Text(verbatim: attributedText.string)
+      #else
         GeometryReader { geometry in
             let size = MessageTextView(attributedString: attributedText,
                                             linkColor: linkColor,
@@ -94,6 +98,7 @@ struct MarkdownText: View {
             maxHeight: self.contentSizeThatFits.height,
             alignment: .leading
         )
+      #endif
     }
 }
 
