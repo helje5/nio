@@ -58,6 +58,7 @@ struct MarkdownText: View {
 
     internal var attributedText: NSAttributedString {
         let markdownString = markdown.trimmingCharacters(in: .whitespacesAndNewlines)
+          .replacingOccurrences(of: "<", with: "&lt;")
         let attributedString = try? NSAttributedString(
             commonmark: markdownString,
             attributes: attributes
