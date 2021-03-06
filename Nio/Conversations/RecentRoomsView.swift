@@ -86,8 +86,9 @@ struct RecentRoomsView: View {
                 )
 
             }
+            .listStyle(SidebarListStyle())
             .navigationTitle("Nio")
-            .toolbar { // TBD
+            .toolbar { // TBD: Those exist, but do not show up?
                 ToolbarItem { settingsButton  }
                 ToolbarItem { newConversationButton }
             }
