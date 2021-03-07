@@ -1,8 +1,8 @@
 import SwiftUI
 
 struct ExDivider: View {
-    let color: Color = .accentColor
-    let width: CGFloat = 3
+    private let color: Color = .accentColor
+    private let width: CGFloat = 3
     var body: some View {
         Rectangle()
             .fill(color)
@@ -53,17 +53,6 @@ struct MessageComposerView: View {
             .fill(gradient).opacity(0.9)
     }
 
-    private var messageEditorHeight: CGFloat {
-      #if os(macOS)
-        return min(self.contentSizeThatFits.height, 240)
-      #else
-        return min(
-            self.contentSizeThatFits.height,
-            0.25 * UIScreen.main.bounds.height
-        )
-      #endif
-    }
-
     private var highlightMessageView: some View {
         Group {
             Divider()
@@ -77,13 +66,11 @@ struct MessageComposerView: View {
                             .padding(.leading, 10)
                             .foregroundColor(.accentColor)
                         Spacer()
-                        Button(action: {
-                            self.onCancel()
-                        }, label: {
+                        Button(action: self.onCancel) {
                             SFSymbol.close
                                 .font(.system(size: 20))
                                 .accessibility(label: Text(verbatim: L10n.Composer.AccessibilityLabel.cancelEdit))
-                        })
+                        }
                     }
                     Text(highlightMessage!)
                         .lineLimit(2)
@@ -92,6 +79,41 @@ struct MessageComposerView: View {
                 }
             }.fixedSize(horizontal: false, vertical: true)
         }
+    }
+
+  #if os(macOS)
+    private var attachmentPickerButton: some View {
+        Button(action: { self.showAttachmentPicker.toggle() }) {
+            SFSymbol.attach
+                .accessibilityLabel(L10n.Composer.AccessibilityLabel.sendFile)
+        }
+        .buttonStyle(BorderlessButtonStyle())
+    }
+    private var sendButton: some View {
+        Button(action: self.onCommit) {
+            SFSymbol.send
+                .accessibilityLabel(L10n.Composer.AccessibilityLabel.send)
+        }
+        .buttonStyle(BorderlessButtonStyle())
+        .disabled(attributedMessage.isEmpty)
+    }
+    private var messageEditorView: some View {
+        let textAttributes = TextAttributes()
+        return MultilineTextField(
+            attributedText: $attributedMessage,
+            placeholder: L10n.Composer.newMessage,
+            isEditing: self.$isEditing,
+            textAttributes: textAttributes,
+            onCommit: onCommit
+        )
+        .background(self.background)
+    }
+  #else // iOS
+    private var messageEditorHeight: CGFloat {
+        return min(
+            self.contentSizeThatFits.height,
+            0.25 * UIScreen.main.bounds.height
+        )
     }
 
     private var attachmentPickerButton: some View {
@@ -106,11 +128,7 @@ struct MessageComposerView: View {
     }
 
     private var messageEditorView: some View {
-        #if os(macOS)
-            let textAttributes = TextAttributes()
-        #else
-            let textAttributes = TextAttributes(autocapitalizationType: .sentences)
-        #endif
+        let textAttributes = TextAttributes(autocapitalizationType: .sentences)
         return MultilineTextField(
             attributedText: $attributedMessage,
             placeholder: L10n.Composer.newMessage,
@@ -136,6 +154,7 @@ struct MessageComposerView: View {
         })
         .disabled(attributedMessage.isEmpty)
     }
+  #endif // iOS
 
     var body: some View {
         VStack {

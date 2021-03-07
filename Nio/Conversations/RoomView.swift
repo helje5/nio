@@ -166,6 +166,11 @@ struct RoomView: View {
                                     }))
                     .padding(.horizontal)
             }
+          
+            if #available(macOS 11, *) {
+                Divider()
+            }
+          
             if !(room.room.typingUsers?.filter { $0 != userId }.isEmpty ?? false) {
                 TypingIndicatorContainerView()
             }

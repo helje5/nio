@@ -53,6 +53,46 @@ struct RecentRoomsView: View {
         rooms.filter {$0.room.summary.membership == .invite}
     }
 
+  #if os(macOS)
+    var body: some View {
+        NavigationView {
+            List {
+                if !invitedRooms.isEmpty {
+                    RoomsListSection(
+                        sectionHeader: L10n.RecentRooms.PendingInvitations.header,
+                        rooms: invitedRooms,
+                        onLeaveAlertTitle: L10n.RecentRooms.PendingInvitations.Leave.alertTitle,
+                        selectedRoomId: $selectedRoomId
+                    )
+                }
+
+                RoomsListSection(
+                    sectionHeader: invitedRooms.isEmpty ? nil : L10n.RecentRooms.Rooms.header ,
+                    rooms: joinedRooms,
+                    onLeaveAlertTitle: L10n.RecentRooms.Leave.alertTitle,
+                    selectedRoomId: $selectedRoomId
+                )
+
+            }
+            .listStyle(SidebarListStyle())
+            .navigationTitle("Mio")
+            .toolbar {
+                ToolbarItem(placement: .primaryAction) {
+                    Button(action: { self.selectedNavigationItem = .settings }) {
+                        Label(L10n.RecentRooms.AccessibilityLabel.settings,
+                              systemImage: SFSymbol.settings.rawValue)
+                    }
+                }
+                ToolbarItem(placement: .cancellationAction) {
+                    Button(action: { self.selectedNavigationItem = .newConversation }) {
+                        Label(L10n.RecentRooms.AccessibilityLabel.newConversation,
+                              systemImage: SFSymbol.newConversation.rawValue)
+                    }
+                }
+            }
+        }
+    }
+  #else // iOS
     private var settingsButton: some View {
         Button(action: {
             self.selectedNavigationItem = .settings
@@ -76,34 +116,6 @@ struct RecentRoomsView: View {
     }
 
     var body: some View {
-      #if os(macOS)
-        NavigationView {
-            List {
-                if !invitedRooms.isEmpty {
-                    RoomsListSection(
-                        sectionHeader: L10n.RecentRooms.PendingInvitations.header,
-                        rooms: invitedRooms,
-                        onLeaveAlertTitle: L10n.RecentRooms.PendingInvitations.Leave.alertTitle,
-                        selectedRoomId: $selectedRoomId
-                    )
-                }
-
-                RoomsListSection(
-                    sectionHeader: invitedRooms.isEmpty ? nil : L10n.RecentRooms.Rooms.header ,
-                    rooms: joinedRooms,
-                    onLeaveAlertTitle: L10n.RecentRooms.Leave.alertTitle,
-                    selectedRoomId: $selectedRoomId
-                )
-
-            }
-            .listStyle(SidebarListStyle())
-            .navigationTitle("Nio")
-            .toolbar { // TBD: Those exist, but do not show up?
-                ToolbarItem { settingsButton  }
-                ToolbarItem { newConversationButton }
-            }
-        }
-      #else
         NavigationView {
             List {
                 if !invitedRooms.isEmpty {
@@ -133,9 +145,8 @@ struct RecentRoomsView: View {
             .navigationBarTitle("Nio", displayMode: .inline)
             .navigationBarItems(leading: settingsButton, trailing: newConversationButton)
         }
-      #endif
     }
-
+  #endif // iOS
 }
 
 struct RoomsListSection: View {
