@@ -53,32 +53,31 @@ struct MessageComposerView: View {
             .fill(gradient).opacity(0.9)
     }
 
-    private var highlightMessageView: some View {
-        Group {
-            Divider()
-            HStack {
-                ExDivider()
-                    .background(Color.accentColor)
-                VStack {
-                    HStack {
-                        Text(verbatim: L10n.Composer.editMessage)
-                            .frame(alignment: .leading)
-                            .padding(.leading, 10)
-                            .foregroundColor(.accentColor)
-                        Spacer()
-                        Button(action: self.onCancel) {
-                            SFSymbol.close
-                                .font(.system(size: 20))
-                                .accessibility(label: Text(verbatim: L10n.Composer.AccessibilityLabel.cancelEdit))
-                        }
+    @ViewBuilder private var highlightMessageView: some View {
+        Divider()
+        HStack {
+            ExDivider()
+                .background(Color.accentColor)
+            VStack {
+                HStack {
+                    Text(verbatim: L10n.Composer.editMessage)
+                        .frame(alignment: .leading)
+                        .padding(.leading, 10)
+                        .foregroundColor(.accentColor)
+                    Spacer()
+                    Button(action: self.onCancel) {
+                        SFSymbol.close
+                            .font(.system(size: 20))
+                            .accessibility(label: Text(verbatim: L10n.Composer.AccessibilityLabel.cancelEdit))
                     }
-                    Text(highlightMessage!)
-                        .lineLimit(2)
-                        .padding([.horizontal, .bottom], 10)
-                        .frame(minWidth: 0, maxWidth: .infinity, alignment: Alignment.leading)
                 }
-            }.fixedSize(horizontal: false, vertical: true)
+                Text(highlightMessage!)
+                    .lineLimit(2)
+                    .padding([.horizontal, .bottom], 10)
+                    .frame(minWidth: 0, maxWidth: .infinity, alignment: Alignment.leading)
+            }
         }
+        .fixedSize(horizontal: false, vertical: true)
     }
 
   #if os(macOS)

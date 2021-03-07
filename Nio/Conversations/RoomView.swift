@@ -146,6 +146,10 @@ struct RoomView: View {
     @State private var attributedMessage = NSAttributedString(string: "")
 
     @State private var shouldPaginate = false
+  
+    private var areOtherUsersTyping: Bool {
+        return !(room.room.typingUsers?.filter { $0 != userId }.isEmpty ?? false)
+    }
 
     var body: some View {
         VStack {
@@ -175,9 +179,10 @@ struct RoomView: View {
                 Divider()
             }
           
-            if !(room.room.typingUsers?.filter { $0 != userId }.isEmpty ?? false) {
+            if areOtherUsersTyping {
                 TypingIndicatorContainerView()
             }
+            
             MessageComposerView(
                 showAttachmentPicker: $showAttachmentPicker,
                 isEditing: $isEditingMessage,
