@@ -55,7 +55,7 @@ struct MultilineTextField: View {
 
     var body: some View {
       #if os(macOS)
-        TextField("Edit message",
+        TextField("Compose message",
                   text: plainStringBinding,
                   onEditingChanged: onEditingChanged ?? { _ in },
                   onCommit: onCommit ?? {})

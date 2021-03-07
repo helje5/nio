@@ -107,6 +107,21 @@ struct MessageComposerView: View {
         )
         .background(self.background)
     }
+  
+    var body: some View {
+        VStack {
+            if self.highlightMessage != nil {
+                self.highlightMessageView
+            }
+            HStack {
+                self.attachmentPickerButton
+                    .font(.title)
+                self.messageEditorView
+                self.sendButton
+                    .font(.title)
+            }
+        }
+    }
   #else // iOS
     private var messageEditorHeight: CGFloat {
         return min(
@@ -153,7 +168,6 @@ struct MessageComposerView: View {
         })
         .disabled(attributedMessage.isEmpty)
     }
-  #endif // iOS
 
     var body: some View {
         VStack {
@@ -167,6 +181,7 @@ struct MessageComposerView: View {
             }
         }
     }
+  #endif // iOS
 }
 
 struct MessageComposerView_Previews: PreviewProvider {
