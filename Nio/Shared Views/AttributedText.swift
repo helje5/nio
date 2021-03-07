@@ -152,6 +152,9 @@ struct TextAttributes {
     }
 }
 
+#if os(macOS)
+// TODO: port to macOS. Note: This is really an `AttributedTextField`
+#else
 struct AttributedText: View {
     @Environment(\.textAttributes)
     var envTextAttributes: TextAttributes
@@ -253,3 +256,4 @@ struct AttributedText_Previews: PreviewProvider {
             .previewLayout(.sizeThatFits)
     }
 }
+#endif // iOS

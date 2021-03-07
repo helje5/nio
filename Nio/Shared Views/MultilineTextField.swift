@@ -47,6 +47,13 @@ struct MultilineTextField: View {
     }
 
     var body: some View {
+      #if os(macOS)
+        TextField("Message Editor",
+                  text: .init(get: { attributedText.string },
+                              set: { attributedText = NSAttributedString(string: $0) }),
+                  onEditingChanged: onEditingChanged ?? { _ in },
+                  onCommit: onCommit ?? {})
+      #else // iOS
         AttributedText(
             attributedText: $attributedText,
             isEditing: $isEditing,
@@ -61,14 +68,13 @@ struct MultilineTextField: View {
                 idealHeight: self.contentSizeThatFits.height
             )
             .background(placeholderView, alignment: .topLeading)
+      #endif // iOS
     }
 
-    var placeholderView: some View {
-        return Group {
-            if attributedText.isEmpty {
-                Text(placeholder).foregroundColor(.gray)
-                    .padding(placeholderInset)
-            }
+    @ViewBuilder private var placeholderView: some View {
+        if attributedText.isEmpty {
+            Text(placeholder).foregroundColor(.gray)
+                .padding(placeholderInset)
         }
     }
 }
