@@ -29,10 +29,10 @@ struct RootView: View {
         case .failure(let error):
             VStack {
                 Spacer()
-                Text(error.localizedDescription)
+                Text(verbatim: error.localizedDescription)
                 Spacer()
                 Button(action: { self.store.loginState = .loggedOut }) {
-                    Text(L10n.Login.failureBackToLogin)
+                    Text(verbatim: L10n.Login.failureBackToLogin)
                 }
                 .padding()
             }
