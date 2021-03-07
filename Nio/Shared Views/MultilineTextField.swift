@@ -59,6 +59,7 @@ struct MultilineTextField: View {
                   text: plainStringBinding,
                   onEditingChanged: onEditingChanged ?? { _ in },
                   onCommit: onCommit ?? {})
+            .textFieldStyle(RoundedBorderTextFieldStyle())
       #else // iOS
         AttributedText(
             attributedText: $attributedText,

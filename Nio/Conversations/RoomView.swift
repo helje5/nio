@@ -34,7 +34,10 @@ struct RoomContainerView: View {
 
   #if os(macOS)
     var body: some View {
-        roomView
+        VStack(spacing: 0) {
+            Divider() // TBD: This might be better done w/ toolbar styling
+            roomView
+        }
         .navigationTitle(Text(room.summary.displayname ?? ""))
         // TODO: action sheet
         .sheet(item: $eventToReactTo) { eventId in
