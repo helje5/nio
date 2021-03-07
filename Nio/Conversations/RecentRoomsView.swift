@@ -11,6 +11,12 @@ struct RecentRoomsContainerView: View {
     @State private var selectedNavigationItem: SelectedNavigationItem?
     @State private var selectedRoomId: ObjectIdentifier?
 
+    private func autoselectFirstRoom() {
+      if selectedRoomId == nil {
+          selectedRoomId = store.rooms.first?.id
+      }
+    }
+
     var body: some View {
         RecentRoomsView(selectedNavigationItem: $selectedNavigationItem,
                         selectedRoomId: $selectedRoomId,
@@ -18,11 +24,15 @@ struct RecentRoomsContainerView: View {
             .sheet(item: $selectedNavigationItem) {
                 NavigationSheet(selectedItem: $0, selectedRoomId: $selectedRoomId)
                     // This really shouldn't be necessary. SwiftUI bug?
+                    // 2021-03-07(hh): SwiftUI doesn't document when
+                    //                 environments are preserved. Also
+                    //                 different between platforms.
                     .environmentObject(self.store)
                     .accentColor(accentColor)
             }
             .onAppear {
                 self.store.startListeningForRoomEvents()
+                if #available(macOS 11, *) { autoselectFirstRoom() }
             }
     }
 }
@@ -33,7 +43,7 @@ struct RecentRoomsView: View {
     @Binding fileprivate var selectedNavigationItem: SelectedNavigationItem?
     @Binding fileprivate var selectedRoomId: ObjectIdentifier?
 
-    var rooms: [NIORoom]
+    let rooms: [NIORoom]
 
     private var joinedRooms: [NIORoom] {
         rooms.filter {$0.room.summary.membership == .join}
