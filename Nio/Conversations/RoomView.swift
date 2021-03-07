@@ -32,8 +32,8 @@ struct RoomContainerView: View {
       )
     }
 
+  #if os(macOS)
     var body: some View {
-      #if os(macOS)
         roomView
         .navigationTitle(Text(room.summary.displayname ?? ""))
         // TODO: action sheet
@@ -56,7 +56,11 @@ struct RoomContainerView: View {
         }
         .environmentObject(room)
         // TODO: background sheet thing
-      #else
+        .background(Color(.textBackgroundColor))
+        .frame(minWidth: Style.minTimelineWidth)
+    }
+  #else // iOS
+    var body: some View {
         roomView
         .navigationBarTitle(Text(room.summary.displayname ?? ""), displayMode: .inline)
         .actionSheet(isPresented: $showAttachmentPicker) {
@@ -100,8 +104,8 @@ struct RoomContainerView: View {
                 }
             }
         )
-      #endif
     }
+  #endif // iOS
 
   #if os(macOS)
     // TODO: port me to macOS

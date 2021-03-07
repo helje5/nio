@@ -76,6 +76,7 @@ struct RecentRoomsView: View {
             }
             .listStyle(SidebarListStyle())
             .navigationTitle("Mio")
+            .frame(minWidth: Style.minSidebarWidth)
             .toolbar {
                 ToolbarItem(placement: .primaryAction) {
                     Button(action: { self.selectedNavigationItem = .settings }) {

@@ -13,7 +13,7 @@ struct NioApp: App {
             RootView()
                 .environmentObject(accountStore)
                 .accentColor(accentColor)
-                .frame(minWidth: 600, idealWidth: 720, minHeight: 320)
+                .frame(minWidth: Style.minWindowWidth, minHeight: Style.minWindowHeight)
                 .presentedWindowToolbarStyle(UnifiedWindowToolbarStyle(showsTitle: false))
           #else
             RootView()
@@ -23,3 +23,12 @@ struct NioApp: App {
         }
     }
 }
+
+#if os(macOS)
+enum Style {
+    static let minSidebarWidth  = 280 as CGFloat
+    static let minTimelineWidth = 480 as CGFloat
+    static let minWindowWidth   = minSidebarWidth + minTimelineWidth + 10
+    static let minWindowHeight  = 320 as CGFloat
+}
+#endif
