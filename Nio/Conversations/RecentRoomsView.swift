@@ -202,7 +202,7 @@ struct RoomsListSection: View {
                 primaryButton: .destructive(
                     Text(verbatim: L10n.Room.Remove.action),
                     action: self.leaveRoom),
-            secondaryButton: .cancel())
+                secondaryButton: .cancel())
         }
     }
 
